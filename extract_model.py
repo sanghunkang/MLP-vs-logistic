@@ -7,14 +7,11 @@
 # Last modified : 20170327(yyyymmdd)
 # Project       : ...
 #############################################################################
+from functools import reduce
+
 # Import packages
-import _pickle as cPickle
-import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-
-# from customhelpers import encode_onehot
-from numpy import genfromtxt
 
 # Network Parameters
 n_hidden_1 = 256 # 1st layer number of features
@@ -24,7 +21,6 @@ n_classes = 2 # MNIST total classes (0-9 digits)
 
 # Model parameters, which will be saved
 params = {
-    'var_epoch_saved': tf.Variable(0),
     'W_h1': tf.Variable(tf.random_normal([n_input, n_hidden_1])),
     'W_h2': tf.Variable(tf.random_normal([n_hidden_1, n_hidden_2])),
     'W_out': tf.Variable(tf.random_normal([n_hidden_2, n_classes])),
@@ -49,10 +45,10 @@ with tf.Session() as sess:
     except tf.errors.NotFoundError:
         print("No saved model found")
 
-
-	# Save the variables
-    # sess.run(params['var_epoch_saved'].assign(epoch_saved + training_epochs))
-    print(params['W_h1'].eval())
-    print(params['W_h2'].eval())
-    save_path = saver.save(sess, ".\\model\\model.ckpt")
-    print("Model saved in file: %s" % save_path)
+    # Save estimated parameters
+    for k in ["h1","h2","out"]:
+        with open(".\\publish\\info_param_" + k + ".csv", "w") as fo:
+            for row in params["W_" + k].eval():
+                row_write = reduce(lambda x1, x2: str(x1) + "," + str(x2), row)
+                fo.write(row_write + "\n")
+            fo.write(str(params["b_" + k].eval()[0]))
