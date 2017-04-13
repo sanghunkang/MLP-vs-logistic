@@ -28,7 +28,7 @@ data_raw = genfromtxt(path_data, delimiter=',')
 data = data_raw[~np.isnan(data_raw).any(axis=1)]
 print(data.shape)
 data_X = data[:,0:23]
-data = np.c_[data_X, encode_onehot(data[:,-1], 2, zero_columns=False)]
+data = np.c_[data_X, encode_onehot(data[:,-2], 2, zero_columns=False)]
 
 # Shuffle the data, divide into training and test sets
 np.random.shuffle(data)
