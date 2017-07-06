@@ -37,11 +37,6 @@ data_training_input = data_training[:,0:23]
 data_training_output = data_training[:,23]
 
 
-
-# logst = linear_model.LogisticRegression()
-
-# logst.fit(data_training_input, data_training_output)
-
 data_test_input = data_test[:,0:23]
 data_test_output = data_test[:,23]
 
